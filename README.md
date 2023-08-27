@@ -19,3 +19,7 @@ Document Search Creation: The bot then uses these embeddings to create a documen
 Conversational Chain Creation: A LangChain ConversationalRetrievalChain is created using the OpenAI model and the document retriever.
 
 User Query: Finally, you enter your query. The bot will provide a response based on the contents of the uploaded PDF, also citing the source sections from the PDF.
+
+![flow_chart2](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/731b1bcd-ca89-48c4-8ca1-414e8929ce22)
+
+
