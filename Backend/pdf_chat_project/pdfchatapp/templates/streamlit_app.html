@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Streamlit App Integration</title>
+  </head>
+  <body>
+    <a href="{% url 'streamlit-app' %}" target="_blank">Open Streamlit App</a>
+    <iframe
+      src="{% url 'streamlit-app' %}"
+      width="100%"
+      height="800px"
+    ></iframe>
+  </body>
+</html>
