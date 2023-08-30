@@ -1,0 +1,21 @@
+<!-- templates/chat.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat with PDFs</title>
+  </head>
+  <body>
+    <h1>Chat with PDFs</h1>
+    <form method="POST" action="{% url 'send_message' %}">
+      {% csrf_token %}
+      <label for="user_question">Your question:</label>
+      <input type="text" name="user_question" id="user_question" required />
+      <button type="submit">Send</button>
+    </form>
+
+    <h2>Chat Responses:</h2>
+    <div id="chat_responses">
+      <!-- Chat responses will be displayed here -->
+    </div>
+  </body>
+</html>

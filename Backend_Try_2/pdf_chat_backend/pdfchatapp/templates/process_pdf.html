@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Process PDF</h2>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Process PDF</button>
+</form>
+
+<h3>Chat Responses:</h3>
+<ul>
+  {% for response in responses %}
+  <li>{{ response.user }}: {{ response.message }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
