@@ -7,3 +7,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class UserPdf(models.Model):
+    pdf_file = models.FileField(upload_to='pdfs/')
