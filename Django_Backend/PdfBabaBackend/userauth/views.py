@@ -14,6 +14,20 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from dotenv import load_dotenv
+import os
+import glob
+from django.conf import settings
+
+def get_pdf_paths():
+    # Construct the path to the "media/pdfs/" directory
+    pdfs_directory = os.path.join(settings.MEDIA_ROOT, 'pdfs')  # Use 'pdfs' as your directory name
+
+    # Use glob to find all PDF files in the directory
+    pdf_paths = glob.glob(os.path.join(pdfs_directory, '*.pdf'))
+
+    return pdf_paths
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class UserRegistrationView(View):
 
