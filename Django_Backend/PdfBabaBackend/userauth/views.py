@@ -33,19 +33,21 @@ class UserRegistrationView(View):
 
     def post(self, request, *args, **kwargs):
         try:
+            
             data = json.loads(request.body)
             username = data.get('username')
             password = data.get('password')
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
-
+            return JsonResponse({'message': 'Invalid JSON data.'}, status=400)
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'message': 'User already registered with this username.'}, status=409)
         if not username or not password:
-            return JsonResponse({'error': 'Username and password are required.'}, status=400)
+            return JsonResponse({'message': 'Username and password are required.'}, status=400)
 
         user = User(username=username, password=password)
         user.save()
 
-        return JsonResponse({'message': 'User registered successfully.'}, status=201)
+        return JsonResponse({'messsage': 'User registered successfully.'}, status=201)
 
 class UserLoginView(View):
 
@@ -151,6 +153,7 @@ def get_chatbot_responses(pdf_docs, user_question):
     raw_text = get_pdf_text(pdf_docs)
     text_chunks = get_text_chunks(raw_text)
     vectorstore = get_vectorstore(text_chunks)
+   
     conversation_chain = get_conversation_chain(vectorstore)
     
     response = conversation_chain({'question': user_question})
@@ -169,8 +172,8 @@ def man(pdf_docs,user_question):
     print(user_chat)
     chatbot_responses = get_chatbot_responses(pdf_docs, user_question)
     user_chat.append({'question': user_question, 'response': chatbot_responses[0]})
-    for idx, response in enumerate(chatbot_responses, start=1):
-        return(user_chat)
+    for idx, response in enumerate(chatbot_responses):
+        return(f" 🤖 : {response}")
 
 
 class PDFUploadView(View):
@@ -189,11 +192,82 @@ class PDFUploadView(View):
         except KeyError:
             return JsonResponse({'error': 'No PDF file provided.'}, status=400)
 
-        # Trigger the processing logic here (as shown in app.py)
-        # You can call the processing functions from app.py here
-
-        # Return a JSON response after processing
-        pdf_docs = [f'./media/pdfs/{pdf_name}.pdf']
+       
+        pdf_docs = get_pdf_paths()
         ans = man(pdf_docs,user_question)
         return JsonResponse({'message': 'PDF uploaded and processed successfully.',"ans":ans}, status=200)
         
+
+
+def list_pdfs(request):
+    # Get the path to the PDFs directory
+    pdfs_dir = os.path.join(settings.MEDIA_ROOT, 'pdfs')
+
+    # List all files in the PDFs directory
+    pdf_files = [f for f in os.listdir(pdfs_dir) if f.endswith('.pdf')]
+
+    # Extract only the file names without extensions
+    pdf_names = [os.path.splitext(pdf)[0] for pdf in pdf_files]
+
+    return JsonResponse({'pdf_names': pdf_names})
+    
+@method_decorator(csrf_exempt, name='dispatch')
+
+class DeleteAllPDFsView(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # Delete all PDFs from the database
+            UserPdf.objects.all().delete()
+            pdfs_directory = os.path.join(settings.MEDIA_ROOT, 'pdfs')
+            for pdf_file in os.listdir(pdfs_directory):
+                if pdf_file.endswith('.pdf'):
+                    file_path = os.path.join(pdfs_directory, pdf_file)
+                    os.remove(file_path)
+
+            return JsonResponse({'message': 'All PDFs deleted successfully.'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class OnlyUploadPdf(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            pdf_name = request.POST.get("pdf_name")
+            print(pdf_name)
+            pdf_file = request.FILES['pdf_file']
+            user_pdf = UserPdf(pdf_file=pdf_file)
+            user_pdf.save()
+        except KeyError:
+            return JsonResponse({'error': 'No PDF file provided.'}, status=400)
+
+        return JsonResponse({'message': 'PDF uploaded successfully.'}, status=200)
+
+class AnswerQuestion(View):
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            user_question = request.POST.get("user_question")
+        except KeyError:
+            return JsonResponse({'error': 'No user question provided.'}, status=400)
+
+        # Get the paths to the PDFs stored in the database
+        pdf_docs = get_pdf_paths()
+
+        # Process the user's question and get chatbot responses
+        ans = man(pdf_docs,user_question)
+
+        # Construct a response JSON with the chatbot's answers
+        data = {
+            'message': 'Question answered successfully.',
+            'ans': ans
+        }
+
+        return JsonResponse(data, status=200)
+
+       
