@@ -3,7 +3,11 @@ import axios from "axios";
 import uniqid from "uniqid";
 import "./FileUpload.css";
 import { useSelector, useDispatch } from "react-redux";
-import { getResponse, uploadAction } from "../Redux/chatReducer/action";
+import {
+  getResponse,
+  uploadAction,
+  uploadPdf,
+} from "../Redux/chatReducer/action";
 
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -50,8 +54,8 @@ const FileUpload = () => {
       // Perform file upload logic here
       // You can use the selectedFile object to upload the single PDF file
       // and handle the response accordingly
-      let user_question = "What is the context of this document?";
-      dispatch(getResponse(user_question, selectedFile, selectedFile.name));
+
+      dispatch(uploadPdf(selectedFile, selectedFile.name));
       console.log(initial);
     } else {
       alert("Please select a file");

@@ -1,59 +1,63 @@
 import React, { useState, useEffect } from "react";
 import "./ChatInterface.css";
+import { useSelector, useDispatch } from "react-redux";
+import { AskQuestion } from "../Redux/chatReducer/action";
 
 const ChatInterface = () => {
-  const [chatBotMessage, setChatBotMessage] = useState("");
   const [userInput, setUserInput] = useState("");
-  const [userMessages, setUserMessages] = useState([]);
-  const [botMessages, setBotMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [isSendingToBot, setIsSendingToBot] = useState(false);
 
-  const handleSubmit = () => {
+  const { bot_response, isLoading } = useSelector((state) => state.chatReducer);
+  const dispatch = useDispatch();
+
+  const handleSubmit = async () => {
     if (userInput.trim() !== "") {
       // Add the user's message to the chat history
-      setUserMessages((prevMessages) => [...prevMessages, userInput]);
+      const userMessage = userInput.trim();
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
+        { type: "user", message: userMessage },
+      ]);
+
+      setIsSendingToBot(true); // Show loading while sending
+
+      // Dispatch the user's question to get a bot response
+      dispatch(AskQuestion(userInput));
+
       setUserInput(""); // Clear the input field
-
-      if (isSendingToBot) {
-        // If sending to the bot, simulate bot response
-        simulateBotResponse(userInput);
-        setIsSendingToBot(false);
-      }
     }
   };
 
-  const handleSend = () => {
-    if (userMessages.length > 0) {
-      const userMessage = userMessages[userMessages.length - 1];
-      setIsSendingToBot(true);
-
-      // In a real application, you would send the user's message to your chatbot backend here for processing
-      // For now, we'll simulate a bot response.
-      simulateBotResponse(userMessage);
+  useEffect(() => {
+    // Handle bot response when it changes in the Redux store
+    if (bot_response) {
+      setChatMessages((prevMessages) => [
+        ...prevMessages,
+        { type: "bot", message: bot_response },
+      ]);
+      setIsSendingToBot(false); // Hide loading when response is received
     }
-  };
-
-  const simulateBotResponse = (userMessage) => {
-    // In a real application, this is where you would make an API request to your chatbot backend
-    // and receive a response.
-    // For now, we'll simulate a bot response.
-    const botResponse = `Bot responds to: ${userMessage}`;
-    setBotMessages((prevMessages) => [...prevMessages, botResponse]);
-  };
+  }, [bot_response]);
 
   return (
     <div className="chat-container">
       <div className="chat">
-        {botMessages.map((message, index) => (
-          <div className="message received" key={index}>
-            <div className="message-content">{message}</div>
+        {chatMessages.map((message, index) => (
+          <div
+            className={`message ${
+              message.type === "user" ? "sent" : "received"
+            }`}
+            key={index}
+          >
+            <div className="message-content">{message.message}</div>
           </div>
         ))}
-        {userMessages.map((message, index) => (
-          <div className="message sent" key={index}>
-            <div className="message-content">{message}</div>
+        {isLoading && (
+          <div className="message loading">
+            <div className="message-content">Loading...</div>
           </div>
-        ))}
+        )}
       </div>
       <div className="message-input">
         <input
@@ -63,7 +67,7 @@ const ChatInterface = () => {
           onChange={(e) => setUserInput(e.target.value)}
         />
         <button id="send-button" onClick={handleSubmit}>
-          {isSendingToBot ? "Send to Bot" : "Send"}
+          {isLoading ? "Sending..." : "Send"}
         </button>
       </div>
     </div>

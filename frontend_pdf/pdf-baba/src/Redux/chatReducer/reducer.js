@@ -1,4 +1,10 @@
-import { upload, success, error, requestResponse } from "./actionType";
+import {
+  upload,
+  success,
+  error,
+  requestResponse,
+  userQuestion,
+} from "./actionType";
 const initialState = {
   upload: [],
   user_questions: "",
