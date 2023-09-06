@@ -65,6 +65,7 @@ const ChatInterface = () => {
           placeholder="Type your message..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
+          border="1px solid black"
         />
         <button id="send-button" onClick={handleSubmit}>
           {isLoading ? "Sending..." : "Send"}

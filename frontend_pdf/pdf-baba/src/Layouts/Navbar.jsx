@@ -19,7 +19,9 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { logoutUser } from "../Redux/authReducer/actions";
 const NavLink = (props) => {
   const { children } = props;
 
@@ -41,8 +43,16 @@ const NavLink = (props) => {
 };
 
 export default function Navbar() {
+  const { isAuth } = useSelector((state) => state.authReducer);
+  console.log(isAuth);
+  const dispatch = useDispatch();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    console.log(isAuth);
+  };
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -62,7 +72,15 @@ export default function Navbar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              <Button>Login / Register</Button>
+
+              {isAuth ? (
+                <Button onClick={handleLogout}>Logout</Button>
+              ) : (
+                <Button>
+                  {" "}
+                  <Link to={"/login"}>Login</Link>
+                </Button>
+              )}
             </Stack>
           </Flex>
         </Flex>

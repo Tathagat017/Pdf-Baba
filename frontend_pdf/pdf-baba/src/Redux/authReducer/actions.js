@@ -11,8 +11,8 @@ const loginRequestAction = () => {
   return { type: LOGIN_REQUEST };
 };
 
-const loginSuccessAction = (payload) => {
-  return { type: LOGIN_SUCCESS, payload };
+const loginSuccessAction = (token) => {
+  return { type: LOGIN_SUCCESS, payload: token };
 };
 
 const loginFailureAction = () => {
@@ -27,14 +27,14 @@ const logoutAction = () => {
   return { type: LOGOUT_SUCCESS };
 };
 
-const url = process.env.REACT_APP_URL;
+const urlLogin = "http://127.0.0.1:8000/user/login/";
 //console.log(url);
-
-export const signupFunction = (email, password) => async (dispatch) => {
-  let obj = { email: email, password: password };
+const urlRegister = "http://127.0.0.1:8000/user/register/";
+export const signupFunction = (username, password) => async (dispatch) => {
+  let obj = { username: username, password: password };
   dispatch(loginRequestAction());
   try {
-    const res = await axios.post(`${url}user/signup`, obj);
+    const res = await axios.post(urlRegister, obj);
 
     dispatch(signupSucesssAction());
   } catch (err) {
@@ -43,15 +43,15 @@ export const signupFunction = (email, password) => async (dispatch) => {
   }
 };
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (username, password) => async (dispatch) => {
   //  login Functionality
-  let obj = { email: email, password: password };
+  let obj = { username: username, password: password };
   dispatch(loginRequestAction());
   try {
     //  console.log(`${url}user/login`, obj);
 
-    const res = await axios.post(`${url}user/login`, obj);
-    sessionStorage.setItem("dealerId", res.data.dealerId);
+    const res = await axios.post(urlLogin, obj);
+    console.log(res);
     dispatch(loginSuccessAction(res.data.token));
   } catch (err) {
     alert("Login failed");
@@ -62,5 +62,4 @@ export const login = (email, password) => async (dispatch) => {
 
 export const logoutUser = () => async (dispatch) => {
   dispatch(logoutAction());
-  sessionStorage.removeItem("dealerId");
 };

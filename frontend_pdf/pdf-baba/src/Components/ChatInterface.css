@@ -15,6 +15,7 @@ body {
   border-radius: 10px;
   overflow-y: scroll;
   max-height: 400px;
+  width: 100%;
 }
 
 .message {

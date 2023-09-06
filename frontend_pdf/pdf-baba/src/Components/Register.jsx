@@ -14,12 +14,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import "./Register.css";
-
+import { useNavigate, Link } from "react-router-dom";
 const Register = () => {
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
   let url = "http://127.0.0.1:8000/user/register/";
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,6 +37,7 @@ const Register = () => {
     try {
       const { data } = await axios.post(url, user);
       console.log(data);
+      navigate("/login");
     } catch (err) {
       console.error(err.message);
     }
@@ -48,17 +50,23 @@ const Register = () => {
       justify={"center"}
       bg={useColorModeValue("#cff1f7e1", "orange.200")}
       style={{
-        background: "#d5ddedf6",
+        background: "#1c1d1ef6",
         boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
         backdropFilter: "blur( 4px )",
         "-webkitBackdropFilter": "blur( 4px )",
         borderRadius: "10px",
         border: " 1px solid rgba( 255, 255, 255, 0.18 )",
+        backgroundImage: "url(./KTe6.gif)",
+        backgroundRepeat: "no-repeat", // Prevent image from repeating
+        backgroundSize: "200% 100%", // Cover the entire container
+        backgroundPosition: "center",
       }}
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+          <Heading fontSize={"2xl"} color={"aliceblue"}>
+            Register New Account
+          </Heading>
         </Stack>
         <Box
           rounded={"lg"}
@@ -102,6 +110,9 @@ const Register = () => {
                 <Checkbox>Remember me</Checkbox>
                 <Text color={"blackAlpha.700"}>Forgot password?</Text>
               </Stack>
+              <Button variant={"link"} color={"blackAlpha.500"}>
+                <Link to="/login">Already Registered? login here </Link>
+              </Button>
               <Button
                 bg={"aliceblue"}
                 color={"blackAlpha.800"}
