@@ -39,3 +39,15 @@ User Query: Finally, you enter your query. The bot will provide a response based
 
 ![pdf_baba_chat](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/9af8204a-84ab-4089-8596-3c5ddd83a3ab)
 
+
+| Action | Endpoint | Request Body | Response |
+| --- | --- | --- | --- |
+| Register User | POST /api/user/register | username (String, required), email (String, required) | User object with id, username, email |
+| Log In User | POST /api/user/login | username (String, required),passwordr(required) | User object with id, username, email, access token |
+| Upload PDF's  | POST /api/pdf/uploadAll | - | pdf_files(required),token(required) in form-data key value pair  |
+| Upload Single PDF | POST /api/pdf/upploadOne | pdf_files(required),token(required) in form-data key value pair  |
+| Get All PDF's | GET /api/list-pdfs | - | Array of pdf_names |
+| POST user_question | POST /api/pdf/AnswerQuestion | - | JSON Response with ChatBot Answer |
+| DELETE All PDF's | DELETE /api/deleteAll | - | Delete all Pdf's |
+| DELETE ONE PDF | POST /api/delete-one-by-name/ | - | pdf_files(required),token(required) in form-data key value pair | - | json response - All instance of file deleted|
+
