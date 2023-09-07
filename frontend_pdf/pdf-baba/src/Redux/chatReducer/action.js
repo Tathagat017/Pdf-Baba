@@ -88,3 +88,22 @@ export const AskQuestion = (user_question) => async (dispatch) => {
     dispatch(errorAction(e));
   }
 };
+let url4 = "http://127.0.0.1:8000/pdf/delete-by-name/";
+export const deleteOneFile = (name) => async (dispatch) => {
+  //  login Functionality
+
+  try {
+    dispatch(requestResponseAction());
+    const formData = new FormData();
+    formData.append("pdf_name", name);
+    const response = await axios.post(url4, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(response);
+  } catch (e) {
+    console.error(e);
+    dispatch(errorAction(e));
+  }
+};

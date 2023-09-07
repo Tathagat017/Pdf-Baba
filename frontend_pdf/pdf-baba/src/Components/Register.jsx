@@ -35,11 +35,11 @@ const Register = () => {
       password: credentials.password,
     };
     try {
-      const { data } = await axios.post(url, user);
-      console.log(data);
+      const res = await axios.post(url, user);
+      console.log(res.data);
       navigate("/login");
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
     }
   };
 

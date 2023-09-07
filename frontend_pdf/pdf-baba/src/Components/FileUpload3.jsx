@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import uniqid from "uniqid";
 import "./FileUpload.css";
@@ -10,12 +10,11 @@ import {
   deleteOneFile,
 } from "../Redux/chatReducer/action";
 
-const FileUpload = ({ forcedRender, render }) => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [fileData, setFileData] = useState([]);
+const FileUpload = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileData, setFileData] = useState(null);
   const dispatch = useDispatch();
   const initial = useSelector((state) => state.chatReducer);
-
   const filesizes = (bytes, decimals = 2) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -26,17 +25,12 @@ const FileUpload = ({ forcedRender, render }) => {
   };
 
   const handleFileChange = (e) => {
-    const newSelectedFiles = [...selectedFiles];
-    const newFileData = [...fileData];
-
-    for (let i = 0; i < e.target.files.length; i++) {
-      const file = e.target.files[i];
-
-      newSelectedFiles.push(file);
-
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        newFileData.push({
+        setFileData({
           id: uniqid(),
           filename: file.name,
           filetype: file.type,
@@ -44,43 +38,26 @@ const FileUpload = ({ forcedRender, render }) => {
           datetime: file.lastModifiedDate.toLocaleString("en-IN"),
           filesize: filesizes(file.size),
         });
-        setFileData(newFileData);
       };
       reader.readAsDataURL(file);
     }
-
-    setSelectedFiles(newSelectedFiles);
   };
 
-  const deleteFile = (id) => {
-    const newSelectedFiles = selectedFiles.filter((file, index) => {
-      return index !== id;
-    });
-    setSelectedFiles(newSelectedFiles);
-
-    const newFileData = fileData.filter((data, index) => {
-      return index !== id;
-    });
-    setFileData(newFileData);
+  const deleteFile = () => {
+    setSelectedFile(null);
+    setFileData(null);
   };
 
   const fileUploadSubmit = async (e) => {
     e.preventDefault();
 
-    if (selectedFiles.length > 0) {
-      // Perform file upload logic here for all selected files
-      // You can use the selectedFiles array to upload all selected PDF files
+    if (selectedFile) {
+      // Perform file upload logic here
+      // You can use the selectedFile object to upload the single PDF file
       // and handle the response accordingly
-      for (let i = 0; i < selectedFiles.length; i++) {
-        dispatch(uploadPdf(selectedFiles[i], selectedFiles[i].name));
-      }
-      forcedRender((prev) => !prev);
-      console.log(render);
-      console.log(initial);
 
-      // Clear the selected files and file data
-      setSelectedFiles([]);
-      setFileData([]);
+      dispatch(uploadPdf(selectedFile, selectedFile.name));
+      console.log(initial);
     } else {
       alert("Please select a file");
     }
@@ -95,7 +72,7 @@ const FileUpload = ({ forcedRender, render }) => {
               <div className="kb-data-box">
                 <div className="kb-modal-data-title">
                   <div className="kb-data-title">
-                    <h6>Multiple File Upload With Preview</h6>
+                    <h6>Single File Upload With Preview</h6>
                   </div>
                 </div>
                 <form onSubmit={fileUploadSubmit}>
@@ -106,33 +83,32 @@ const FileUpload = ({ forcedRender, render }) => {
                         id="fileupload"
                         className="file-upload-input"
                         onChange={handleFileChange}
-                        multiple // Allow multiple file selection
                       />
                       <span>
                         Drag and drop or{" "}
-                        <span className="file-link">Choose your files</span>
+                        <span className="file-link">Choose your file</span>
                       </span>
                     </div>
                   </div>
-                  {fileData.map((file, index) => (
-                    <div className="kb-attach-box mb-3" key={file.id}>
+                  {fileData && (
+                    <div className="kb-attach-box mb-3">
                       <div className="file-atc-box">
                         <div className="file-image">
                           <i className="far fa-file-alt"></i>
                         </div>
                         <div className="file-detail">
-                          <h6>{file.filename}</h6>
+                          <h6>{fileData.filename}</h6>
                           <p>
-                            <span>Size : {file.filesize}</span>
+                            <span>Size : {fileData.filesize}</span>
                             <span className="ml-2">
-                              Modified Time : {file.datetime}
+                              Modified Time : {fileData.datetime}
                             </span>
                           </p>
                           <div className="file-actions">
                             <button
                               type="button"
                               className="file-action-btn"
-                              onClick={() => deleteFile(index)}
+                              onClick={deleteFile}
                             >
                               Delete
                             </button>
@@ -140,7 +116,7 @@ const FileUpload = ({ forcedRender, render }) => {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  )}
                   <div className="kb-buttons-box">
                     <button
                       type="submit"

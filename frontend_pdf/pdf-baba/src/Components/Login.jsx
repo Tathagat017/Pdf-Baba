@@ -44,7 +44,7 @@ const Login = () => {
       minH={"100vh"}
       align={"center"}
       justify={"center"}
-      bg={useColorModeValue("#212323e0", "orange.200")}
+      bg={"#212323e0"}
       style={{
         background: "#94e9f4f6",
         boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
@@ -64,7 +64,7 @@ const Login = () => {
         </Stack>
         <Box
           rounded={"lg"}
-          bg={useColorModeValue("#cbfcff69", "gray.700")}
+          bg={"#cbfcff69"}
           boxShadow={"lg"}
           p={8}
           style={{
