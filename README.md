@@ -1,6 +1,7 @@
 # Pdf-Baba
 A Open AI , Longchain and  Streamlit application that utilizes the power of LangChain and OpenAI's language model to provide a conversational Q&A chatbot which build a conversation around pdf uploaded. Users can upload a PDF document, and the chatbot will answer questions about the document's content. The application allows you to chat with multiple PDF documents. You can ask questions about the PDFs using natural language, and the application will provide relevant responses based on the content of the documents. This app utilizes a language model to generate accurate answers to your queries. Please note that the app will only respond to questions related to the loaded PDFs.
 
+## CLICK ON IMAGE BELOW TO WATCH PRESSENTATION
 [![Watch the video](https://cdn.movavi.io/pages/0012/74/9211a347fc630483f3edf014cde647c0a7669c34.webp)
 )](https://vimeo.com/861875160/0104dd27d8?share=copy)
 
@@ -26,4 +27,15 @@ User Query: Finally, you enter your query. The bot will provide a response based
 
 ![flow_chart2](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/b8067abb-fea7-4839-82b5-42a3b9b8bb78)
 
-###Login / Register 
+###Login / Register (Protected Route :Front-End and Backend)
+
+![register](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/f9c0aa76-d386-48dc-a812-b8aeea5402fb)
+
+![login_dark](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/d0498302-a86c-4d10-90e4-f28478de95cd)
+
+![login_light](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/5f438314-91a1-4ef1-8f58-f0c831100b82)
+
+### Chat 
+
+![pdf_baba_chat](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/9af8204a-84ab-4089-8596-3c5ddd83a3ab)
+
