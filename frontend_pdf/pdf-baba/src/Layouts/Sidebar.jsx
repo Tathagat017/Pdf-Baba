@@ -21,11 +21,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const SidebarFuction = ({ render, forcedRender }) => {
   const [trig, setTrig] = useState(false);
-  console.log("render", render);
+
   const [pdfs, setPdfs] = useState([]);
   const { upload } = useSelector((store) => store.chatReducer);
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log("useEffect called", "render is", render);
     axios
       .get("http://127.0.0.1:8000/pdf/list/")
       .then((response) => {
@@ -35,12 +36,12 @@ export const SidebarFuction = ({ render, forcedRender }) => {
         console.error("Error fetching PDFs: ", error);
       });
   }, [render, trig, upload]);
-  console.log(upload);
+  // console.log(upload);
 
-  const handleDeleteFile = (name) => {
-    dispatch(deleteOneFile(name));
-    setTrig((prev) => !prev);
+  const handleDeleteFile = async (name) => {
+    await dispatch(deleteOneFile(name));
     forcedRender((prev) => !prev);
+    console.log("2-render", render);
   };
 
   return (

@@ -28,13 +28,13 @@ const Login = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
-    console.log(credentials);
+    //console.log(credentials);
   };
 
   const handleLogin = (e) => {
-    console.log(credentials.username, credentials.password);
+    //console.log(credentials.username, credentials.password);
     dispatch(login(credentials.username, credentials.password));
-    console.log("afet", isAuth);
+    //console.log("afet", isAuth);
   };
   if (isAuth) {
     return <Navigate to="/" />;

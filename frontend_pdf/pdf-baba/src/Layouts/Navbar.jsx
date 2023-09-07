@@ -44,14 +44,14 @@ const NavLink = (props) => {
 
 export default function Navbar() {
   const { isAuth } = useSelector((state) => state.authReducer);
-  console.log(isAuth);
+  // console.log(isAuth);
   const dispatch = useDispatch();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    console.log(isAuth);
+    //console.log(isAuth);
   };
   return (
     <>

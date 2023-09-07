@@ -72,11 +72,13 @@ const FileUpload = ({ forcedRender, render }) => {
       // You can use the selectedFiles array to upload all selected PDF files
       // and handle the response accordingly
       for (let i = 0; i < selectedFiles.length; i++) {
-        dispatch(uploadPdf(selectedFiles[i], selectedFiles[i].name));
+        await dispatch(uploadPdf(selectedFiles[i], selectedFiles[i].name));
       }
-      forcedRender((prev) => !prev);
-      console.log(render);
-      console.log(initial);
+
+      await forcedRender((prev) => !prev);
+      console.log("1", render);
+      //console.log(render);
+      //console.log(initial);
 
       // Clear the selected files and file data
       setSelectedFiles([]);
