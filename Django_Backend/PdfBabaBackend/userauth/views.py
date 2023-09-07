@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import os
 import glob
 from django.conf import settings
-
+from django.core.files.storage import FileSystemStorage
 def get_pdf_paths():
     # Construct the path to the "media/pdfs/" directory
     pdfs_directory = os.path.join(settings.MEDIA_ROOT, 'pdfs')  # Use 'pdfs' as your directory name
@@ -270,4 +270,34 @@ class AnswerQuestion(View):
 
         return JsonResponse(data, status=200)
 
-       
+@method_decorator(csrf_exempt, name='dispatch')
+class DeleteAllInstancesOfPDFView(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            pdf_name = request.POST.get("pdf_name")
+
+            # Check if PDFs with the specified name exist in the database
+            pdfs_to_delete = UserPdf.objects.filter(pdf_file__icontains=pdf_name)
+
+            if pdfs_to_delete.exists():
+                # Get the default storage (FileSystemStorage)
+                fs = FileSystemStorage(location=settings.MEDIA_ROOT)
+
+                for pdf_to_delete in pdfs_to_delete:
+                    # Get the file path within the storage
+                    file_path = pdf_to_delete.pdf_file.name
+
+                    # Delete the actual PDF file from the storage
+                    pdf_file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+                    if os.path.exists(pdf_file_path):
+                        os.remove(pdf_file_path)
+
+                    # Delete the PDF entry from the database
+                    pdf_to_delete.delete()
+
+                return JsonResponse({'message': f'All instances of PDF "{pdf_name}" deleted successfully.'}, status=200)
+            else:
+                return JsonResponse({'error': f'No instances of PDF "{pdf_name}" found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)

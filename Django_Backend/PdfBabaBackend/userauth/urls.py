@@ -10,7 +10,8 @@ urlpatterns = [
     path('pdf/list/', views.list_pdfs, name='list_pdfs'),
     path('pdf/delete-all/', views.DeleteAllPDFsView.as_view(), name='delete_all_pdfs'),
     path('pdf/upload-only/', views.OnlyUploadPdf.as_view(), name='pdf-upload-only'), 
-    path('pdf/answer-question/', views.AnswerQuestion.as_view(), name='answer_question')
+    path('pdf/answer-question/', views.AnswerQuestion.as_view(), name='answer_question'),
+    path('pdf/delete-by-name/', views.DeleteAllInstancesOfPDFView.as_view(), name='delete_pdf_by_name'),
    
 ]
 
