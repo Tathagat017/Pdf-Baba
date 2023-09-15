@@ -18,9 +18,7 @@ A Open AI , Longchain and  Streamlit application that utilizes the power of Lang
 [![Watch the video](https://cdn.movavi.io/pages/0012/74/9211a347fc630483f3edf014cde647c0a7669c34.webp)
 )](https://vimeo.com/861875160/0104dd27d8?share=copy)
 
-[![Watch the video](![youtube](https://github.com/Tathagat017/Pdf-Baba/assets/114250830/4b1206e7-059c-4d81-9b1d-44bebc86b379)
-
-([https://vimeo.com/861875160/0104dd27d8?share=copy](https://youtu.be/EALCVASQ5F8?si=wme3hJsDfzt_S-q7))
+https://youtu.be/EALCVASQ5F8?si=wme3hJsDfzt_S-q7
 
 
 ## Design Architecture
