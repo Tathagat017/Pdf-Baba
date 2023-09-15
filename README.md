@@ -55,7 +55,7 @@ User Query: Finally, you enter your query. The bot will provide a response based
 
 ## youtube
 
-[![Watch the video](https://static.vecteezy.com/system/resources/previews/018/930/575/original/youtube-logo-youtube-icon-transparent-free-png.png)](https://youtu.be/EALCVASQ5F8?si=wme3hJsDfzt_S-q7)
+[![Watch the video](https://static.vecteezy.com/system/resources/previews/018/930/575/original/youtube-logo-youtube-icon-transparent-free-png.png?w=200)](https://youtu.be/EALCVASQ5F8?si=wme3hJsDfzt_S-q7)
 
 
 | Action | Endpoint | Request Body | Response |
